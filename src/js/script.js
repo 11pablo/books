@@ -40,17 +40,24 @@
   /*favorite books */
   const initActions = function() {
     const images = document.querySelectorAll(select.imageOf.booksImage); //referencja do bookImage
+    let bookId;
     console.log(images);
     for(let image of images){
       image.addEventListener('dblclick', function (event){ //nasłuchiwanie na podwójne kliknięcie
         event.preventDefault();
-        /*Add favoriteBook to the photo*/
-        image.classList.add('favorite'); //dodanie klasy  favoriteBook do klikniętego zdjęcia
-        /*download Id*/
-        let bookId = image.getAttribute('data-id'); //identyfikator id książki
-        /*adding an id to an array*/
-        favoriteBooks.push(bookId); //dodanie id do tablicy
-        console.log(favoriteBooks);
+        if (!image.classList.contains('favorite')){ //jeśli nie istnieje klasa favorite to
+          /*Add favoriteBook to the photo*/
+          image.classList.add('favorite'); //dodanie klasy  favorite do klikniętego zdjęcia
+          /*download Id*/
+          bookId = image.getAttribute('data-id'); //identyfikator id książki
+          /*adding an id to an array*/
+          favoriteBooks.push(bookId); //dodanie id książki do tablicy
+          console.log(favoriteBooks);
+        } else {
+          image.classList.remove('favorite'); //usunięcie klasy
+          favoriteBooks.splice(favoriteBooks.indexOf(bookId), 1); //usunięcie z tablicy id
+          console.log(favoriteBooks);
+        }
       });
       
     }
