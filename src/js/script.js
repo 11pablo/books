@@ -10,7 +10,7 @@
       booksList: '.books-list',
     },
     imageOf: {
-      booksImage: '.books-list .book__image',
+      bookImage: 'book__image',
     },
   };
   
@@ -39,30 +39,31 @@
 
   /*favorite books */
   const initActions = function() {
-    const images = document.querySelectorAll(select.imageOf.booksImage); //referencja do bookImage
+  
     let bookId;
-    console.log(images);
-    for(let image of images){
-      image.addEventListener('dblclick', function (event){ //nasłuchiwanie na podwójne kliknięcie
-        event.preventDefault();
+    const bookList = document.querySelector (select.listOf.booksList); //referencja do bookImage
+    console.log('bookList:',bookList);
+    bookList.addEventListener('dblclick', function (event){ //nasłuchiwanie na kliknięcie 
+      if(event.target.offsetParent.classList.contains(select.imageOf.bookImage)){
+        const image = event.target.offsetParent;      
+        console.log('image:',image);
         if (!image.classList.contains('favorite')){ //jeśli nie istnieje klasa favorite to
-          /*Add favoriteBook to the photo*/
+          //Add favoriteBook to the photo
           image.classList.add('favorite'); //dodanie klasy  favorite do klikniętego zdjęcia
-          /*download Id*/
+          //download Id
           bookId = image.getAttribute('data-id'); //identyfikator id książki
-          /*adding an id to an array*/
+          //adding an id to an array
           favoriteBooks.push(bookId); //dodanie id książki do tablicy
           console.log(favoriteBooks);
+          console.log(image.classList);
         } else {
           image.classList.remove('favorite'); //usunięcie klasy
           favoriteBooks.splice(favoriteBooks.indexOf(bookId), 1); //usunięcie z tablicy id
           console.log(favoriteBooks);
         }
-      });
-      
-    }
+      }
+    });
   };
-  
   renderBook();
   initActions();
 }
