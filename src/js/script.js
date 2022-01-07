@@ -24,7 +24,11 @@
   /*presentation of books */
   const renderBook = function(){
     for(let book of dataSource.books){
-  
+      const ratingBgc = determineRatingBgc(book.rating); //określenie koloru przez wywołanie funkcji
+      book.ratingBgc = ratingBgc;
+      book.ratingWidth= book.rating * 10; //szerokość paska
+      console.log(book);
+    
       /*generate html base on template*/
       const generatedHTML = templates.templateBook(book); // tworzenie html łączącego w sobie szablon i dane o książkach
       /*create element using utils.createElementFromHTML*/
@@ -84,29 +88,47 @@
       }
       filterBooks();
     });
+  };
 
-    function filterBooks() {
-      for (let book of dataSource.books) { //przejście po książkach
-        let shouldBeHidden = false;
-        for (const filter of filtersTab) {//przejście po tablicy opcji filtrowania
-          console.log('filter:',filter);
-          if (!book.details[filter]) { // czy właśćiwość filter = false
-            shouldBeHidden = true; 
-            break;
-          }
+  const filterBooks = function() {
+    for (let book of dataSource.books) { //przejście po książkach
+      let shouldBeHidden = false;
+      for (const filter of filtersTab) {//przejście po tablicy opcji filtrowania
+        console.log('filter:',filter);
+        if (!book.details[filter]) { // czy właśćiwość filter = false
+          shouldBeHidden = true; 
+          break;
         }
-        console.log('shouldbeHidden',shouldBeHidden);
-        if (shouldBeHidden) { //jeśli true ukryj
-          const brightnessBook = document.querySelector('.book__image[data-id="' + book.id + '"]'); // dla książki  o id 
-          brightnessBook.classList.add('hidden');// dodaje klasę hidden ,ukryj
-        } else {
-          const brightnessBook = document.querySelector('.book__image[data-id="' + book.id + '"]');
-          console.log('book.id:',book.id);
-          brightnessBook.classList.remove('hidden'); //usuń klasę hidden
-        }
+      }
+      console.log('shouldbeHidden',shouldBeHidden);
+      if (shouldBeHidden) { //jeśli true ukryj
+        const brightnessBook = document.querySelector('.book__image[data-id="' + book.id + '"]'); // dla książki  o id 
+        brightnessBook.classList.add('hidden');// dodaje klasę hidden ,ukryj
+      } else {
+        const brightnessBook = document.querySelector('.book__image[data-id="' + book.id + '"]');
+        console.log('book.id:',book.id);
+        brightnessBook.classList.remove('hidden'); //usuń klasę hidden
       }
     }
   };
+
+
+  const determineRatingBgc = function(rating){
+    let background = '';
+
+    if(rating < 6){
+      background = 'linear-gradient(to bottom, #f1da36 0%, #f1da36 100%)';
+    } else if(rating > 6 && rating <= 8){
+      background = 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%)';
+    } else if(rating > 8 && rating <= 9){
+      background = 'linear-gradient(to bottom, #299a0b 0%, #299a0b 100%)';
+    }else if(rating > 9){
+      background = 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%)';
+    }
+
+    return background;
+  };
+  
   renderBook();
   initActions();
 }
